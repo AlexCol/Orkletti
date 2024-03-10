@@ -4,11 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace backendOrkletti.src.Model.Entity;
 
 [Table("profile")]
-public class Profile {
-	[Key]
-	[Column("cd_profile")]
-	public string Id { get; set; }
-
+public class Profile : BaseEntity {
 	[Column("ds_fist_name")]
 	public string FirstName { get; set; }
 

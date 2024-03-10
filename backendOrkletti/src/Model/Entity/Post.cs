@@ -4,11 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace backendOrkletti.src.Model.Entity;
 
 [Table("post")]
-public class Post {
-	[Key]
-	[Column("cd_post")]
-	public Guid Id { get; set; }
-
+public class Post : BaseEntity {
 	[Column("ds_post_body")]
 	public string Body { get; set; }
 

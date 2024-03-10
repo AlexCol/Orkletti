@@ -4,11 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace backendOrkletti.src.Model.Entity;
 
 [Table("community")]
-public class Community {
-	[Key]
-	[Column("cd_community")]
-	public Guid Id { get; set; }
-
+public class Community : BaseEntity {
 	[Column("ds_title")]
 	public string Tittle { get; set; }
 
