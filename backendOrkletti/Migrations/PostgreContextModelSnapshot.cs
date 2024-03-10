@@ -79,6 +79,14 @@ namespace backendOrkletti.Migrations
                         .HasColumnType("text")
                         .HasColumnName("cd_created_by");
 
+                    b.Property<int>("Dislikes")
+                        .HasColumnType("integer")
+                        .HasColumnName("nr_dislikes");
+
+                    b.Property<int>("Likes")
+                        .HasColumnType("integer")
+                        .HasColumnName("nr_likes");
+
                     b.Property<string>("ProfileId")
                         .HasColumnType("text")
                         .HasColumnName("cd_profile");
@@ -170,7 +178,8 @@ namespace backendOrkletti.Migrations
                 {
                     b.HasOne("backendOrkletti.src.Model.Entity.Profile", "CreatedBy")
                         .WithMany()
-                        .HasForeignKey("CreatedById");
+                        .HasForeignKey("CreatedById")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("backendOrkletti.src.Model.Entity.Profile", "Profile")
                         .WithMany()
@@ -178,7 +187,8 @@ namespace backendOrkletti.Migrations
 
                     b.HasOne("backendOrkletti.src.Model.Entity.Topic", "Topic")
                         .WithMany()
-                        .HasForeignKey("TopicId");
+                        .HasForeignKey("TopicId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.Navigation("CreatedBy");
 
@@ -191,7 +201,8 @@ namespace backendOrkletti.Migrations
                 {
                     b.HasOne("backendOrkletti.src.Model.Entity.Community", "Community")
                         .WithMany()
-                        .HasForeignKey("CommunityId");
+                        .HasForeignKey("CommunityId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("backendOrkletti.src.Model.Entity.Profile", "CreatedBy")
                         .WithMany()
