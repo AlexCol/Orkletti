@@ -11,9 +11,11 @@ public class PostgreContext : DbContext {
 	}
 
 	public DbSet<Profile> Profiles { get; set; }
+	public DbSet<Community> Communities { get; set; }
 
 	protected override void OnModelCreating(ModelBuilder modelBuilder) {
 		base.OnModelCreating(modelBuilder);
 
+		modelBuilder.Entity<Community>().Property("ProfileId").HasColumnName("cd_profile_id");
 	}
 }

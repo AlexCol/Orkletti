@@ -14,9 +14,14 @@ Microsoft.EntityFrameworkCore.Design - 8.0.1
 AutoMapper - 13.0.1
 
 
+dotnet ef migrations add 'firstMigration'
+dotnet ef migrations add 'communityMigration'
+
+/dotnet ef database update profileMigration
+
 
 //
-dotnet ef migrations add 'minhaPrimeiraMigration'
+dotnet ef migrations add 'profileMigration'
 dotnet ef database update
 
 

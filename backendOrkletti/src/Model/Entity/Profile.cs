@@ -1,16 +1,23 @@
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using backendOrkletti.src.Model.Entity.Base;
 
 namespace backendOrkletti.src.Model.Entity;
 
 [Table("profile")]
-public class Profile : BaseEntity {
-	[Column("ds_fistname")]
+public class Profile {
+	[Key]
+	[Column("cd_profile_id")]
+	public string Id { get; set; }
+
+	[Column("ds_fist_name")]
 	public string FirstName { get; set; }
-	[Column("ds_lastname")]
+
+	[Column("ds_last_name")]
 	public string LastName { get; set; }
-	[Column("bl_profileimage")]
+
+	[Column("bl_profile_image")]
 	public byte[] ProfileImage { get; set; }
+
 	[Column("ds_bio")]
 	public string Bio { get; set; }
 }
