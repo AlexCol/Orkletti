@@ -15,6 +15,12 @@ public class Post {
 	[Column("bl_post_attachment")]
 	public byte[] Attachment { get; set; }
 
+	[Column("nr_likes")]
+	public int Likes { get; set; }
+
+	[Column("nr_dislikes")]
+	public int Dislikes { get; set; }
+
 	[Column("cd_topic")]
 	public Topic Topic { get; set; }
 
