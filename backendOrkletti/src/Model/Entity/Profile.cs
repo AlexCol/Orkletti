@@ -6,7 +6,7 @@ namespace backendOrkletti.src.Model.Entity;
 [Table("profile")]
 public class Profile {
 	[Key]
-	[Column("cd_profile_id")]
+	[Column("cd_profile")]
 	public string Id { get; set; }
 
 	[Column("ds_fist_name")]

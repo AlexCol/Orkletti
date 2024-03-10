@@ -12,10 +12,19 @@ public class PostgreContext : DbContext {
 
 	public DbSet<Profile> Profiles { get; set; }
 	public DbSet<Community> Communities { get; set; }
+	public DbSet<Topic> Topics { get; set; }
+	public DbSet<Post> Posts { get; set; }
 
 	protected override void OnModelCreating(ModelBuilder modelBuilder) {
 		base.OnModelCreating(modelBuilder);
 
-		modelBuilder.Entity<Community>().Property("ProfileId").HasColumnName("cd_profile_id");
+		modelBuilder.Entity<Community>().Property("CreatedById").HasColumnName("cd_created_by");
+
+		modelBuilder.Entity<Topic>().Property("CommunityId").HasColumnName("cd_community");
+		modelBuilder.Entity<Topic>().Property("CreatedById").HasColumnName("cd_created_by");
+
+		modelBuilder.Entity<Post>().Property("TopicId").HasColumnName("cd_topic");
+		modelBuilder.Entity<Post>().Property("ProfileId").HasColumnName("cd_profile");
+		modelBuilder.Entity<Post>().Property("CreatedById").HasColumnName("cd_created_by");
 	}
 }

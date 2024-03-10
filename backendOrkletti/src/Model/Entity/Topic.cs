@@ -3,23 +3,17 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace backendOrkletti.src.Model.Entity;
 
-[Table("post")]
-public class Post {
+[Table("topic")]
+public class Topic {
 	[Key]
-	[Column("cd_post")]
+	[Column("cd_topic")]
 	public Guid Id { get; set; }
 
-	[Column("ds_post_body")]
-	public string Body { get; set; }
+	[Column("ds_title")]
+	public string Tittle { get; set; }
 
-	[Column("bl_post_attachment")]
-	public byte[] Attachment { get; set; }
-
-	[Column("cd_topic")]
-	public Topic Topic { get; set; }
-
-	[Column("cd_profile")]
-	public Profile Profile { get; set; }
+	[Column("cd_community")]
+	public Community Community { get; set; }
 
 	[Column("cd_created_by")]
 	public Profile CreatedBy { get; set; }

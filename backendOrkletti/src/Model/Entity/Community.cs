@@ -18,9 +18,9 @@ public class Community {
 	[Column("ds_description")]
 	public string Description { get; set; }
 
-	[Column("cd_user_code")]
-	public Profile Profile { get; set; }
+	[Column("cd_created_by")]
+	public Profile CreatedBy { get; set; }
 
-	[Column("dt_createdAt")]
+	[Column("dt_created_at")]
 	public DateTime CreatedAt { get; set; }
 }

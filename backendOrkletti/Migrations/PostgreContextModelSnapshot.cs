@@ -31,7 +31,11 @@ namespace backendOrkletti.Migrations
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp without time zone")
-                        .HasColumnName("dt_createdAt");
+                        .HasColumnName("dt_created_at");
+
+                    b.Property<string>("CreatedById")
+                        .HasColumnType("text")
+                        .HasColumnName("cd_created_by");
 
                     b.Property<string>("Description")
                         .HasColumnType("text")
@@ -41,26 +45,64 @@ namespace backendOrkletti.Migrations
                         .HasColumnType("bytea")
                         .HasColumnName("bl_image");
 
-                    b.Property<string>("ProfileId")
-                        .HasColumnType("text")
-                        .HasColumnName("cd_profile_id");
-
                     b.Property<string>("Tittle")
                         .HasColumnType("text")
                         .HasColumnName("ds_title");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ProfileId");
+                    b.HasIndex("CreatedById");
 
                     b.ToTable("community");
+                });
+
+            modelBuilder.Entity("backendOrkletti.src.Model.Entity.Post", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("cd_post");
+
+                    b.Property<byte[]>("Attachment")
+                        .HasColumnType("bytea")
+                        .HasColumnName("bl_post_attachment");
+
+                    b.Property<string>("Body")
+                        .HasColumnType("text")
+                        .HasColumnName("ds_post_body");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("dt_created_at");
+
+                    b.Property<string>("CreatedById")
+                        .HasColumnType("text")
+                        .HasColumnName("cd_created_by");
+
+                    b.Property<string>("ProfileId")
+                        .HasColumnType("text")
+                        .HasColumnName("cd_profile");
+
+                    b.Property<Guid?>("TopicId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("cd_topic");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CreatedById");
+
+                    b.HasIndex("ProfileId");
+
+                    b.HasIndex("TopicId");
+
+                    b.ToTable("post");
                 });
 
             modelBuilder.Entity("backendOrkletti.src.Model.Entity.Profile", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("text")
-                        .HasColumnName("cd_profile_id");
+                        .HasColumnName("cd_profile");
 
                     b.Property<string>("Bio")
                         .HasColumnType("text")
@@ -83,13 +125,81 @@ namespace backendOrkletti.Migrations
                     b.ToTable("profile");
                 });
 
+            modelBuilder.Entity("backendOrkletti.src.Model.Entity.Topic", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("cd_topic");
+
+                    b.Property<Guid?>("CommunityId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("cd_community");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("timestamp without time zone")
+                        .HasColumnName("dt_created_at");
+
+                    b.Property<string>("CreatedById")
+                        .HasColumnType("text")
+                        .HasColumnName("cd_created_by");
+
+                    b.Property<string>("Tittle")
+                        .HasColumnType("text")
+                        .HasColumnName("ds_title");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CommunityId");
+
+                    b.HasIndex("CreatedById");
+
+                    b.ToTable("topic");
+                });
+
             modelBuilder.Entity("backendOrkletti.src.Model.Entity.Community", b =>
                 {
+                    b.HasOne("backendOrkletti.src.Model.Entity.Profile", "CreatedBy")
+                        .WithMany()
+                        .HasForeignKey("CreatedById");
+
+                    b.Navigation("CreatedBy");
+                });
+
+            modelBuilder.Entity("backendOrkletti.src.Model.Entity.Post", b =>
+                {
+                    b.HasOne("backendOrkletti.src.Model.Entity.Profile", "CreatedBy")
+                        .WithMany()
+                        .HasForeignKey("CreatedById");
+
                     b.HasOne("backendOrkletti.src.Model.Entity.Profile", "Profile")
                         .WithMany()
                         .HasForeignKey("ProfileId");
 
+                    b.HasOne("backendOrkletti.src.Model.Entity.Topic", "Topic")
+                        .WithMany()
+                        .HasForeignKey("TopicId");
+
+                    b.Navigation("CreatedBy");
+
                     b.Navigation("Profile");
+
+                    b.Navigation("Topic");
+                });
+
+            modelBuilder.Entity("backendOrkletti.src.Model.Entity.Topic", b =>
+                {
+                    b.HasOne("backendOrkletti.src.Model.Entity.Community", "Community")
+                        .WithMany()
+                        .HasForeignKey("CommunityId");
+
+                    b.HasOne("backendOrkletti.src.Model.Entity.Profile", "CreatedBy")
+                        .WithMany()
+                        .HasForeignKey("CreatedById");
+
+                    b.Navigation("Community");
+
+                    b.Navigation("CreatedBy");
                 });
 #pragma warning restore 612, 618
         }
