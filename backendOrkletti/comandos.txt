@@ -1,0 +1,30 @@
+
+//cria o git ignore para projetos dotnet
+dotnet new gitignore
+
+//dependencias adicionadas
+Serilog - 3.1.1
+Serilog.AspNetCore 8.0.1
+Npgsql.EntityFrameworkCore.PostgreSQL - 8.0
+Flunt - 2.0.5
+Microsoft.AspNetCore.Mvc.NewtonsoftJson - 8.0.0
+Microsoft.AspNetCore.Authentication.JwtBearer - 8.0.2
+Microsoft.EntityFrameworkCore - 8.0.1
+Microsoft.EntityFrameworkCore.Design - 8.0.1
+AutoMapper - 13.0.1
+
+
+
+//
+dotnet ef migrations add 'minhaPrimeiraMigration'
+dotnet ef database update
+
+
+# Para desfazer a última migração aplicada
+dotnet ef database update NomeDaMigraçãoAnterior
+
+# Para desfazer todas as migrações
+dotnet ef database update 0
+
+# Para remover a última migração que ainda não foi aplicada ao banco de dados
+dotnet ef migrations remove

@@ -1,0 +1,12 @@
+
+docker run -d --name postgreOrkletti -e POSTGRES_USER=root -e POSTGRES_PASSWORD=orkletti@852ad -e POSTGRES_DB=orklett -p 5432:5432 postgres
+
+
+//criar no docker um banco de dados postgres
+docker run -d --name {nome_container} -e POSTGRES_USER={user} -e POSTGRES_PASSWORD={senha} -e POSTGRES_DB={nomeBanco} -p 5432:5432 postgres
+
+//exemplo para bancos mysql - usuário root
+docker run -d --name {nome_container} -e MYSQL_ROOT_PASSWORD={senha} -e MYSQL_DATABASE={nomebanco} -p 3306:3306 mysql
+
+//exemplo para banco sqlserver --precisar criar o banco depois, na mão e o usuário é 'sa'
+docker run -e 'ACCEPT_EULA=Y' -e 'SA_PASSWORD={senha}' -p 1433:1433 --name {nomeDoContainer} -d mcr.microsoft.com/mssql/server:2019-latest
