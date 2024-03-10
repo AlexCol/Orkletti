@@ -14,6 +14,7 @@ public class PostgreContext : DbContext {
 	public DbSet<Community> Communities { get; set; }
 	public DbSet<Topic> Topics { get; set; }
 	public DbSet<Post> Posts { get; set; }
+	public DbSet<LikeOrDislikeRegister> LikeOrDislikeRegisters { get; set; }
 
 	protected override void OnModelCreating(ModelBuilder modelBuilder) {
 		base.OnModelCreating(modelBuilder);
@@ -34,5 +35,13 @@ public class PostgreContext : DbContext {
 		modelBuilder.Entity<Post>().Property("TopicId").HasColumnName("cd_topic");
 		modelBuilder.Entity<Post>().Property("ProfileId").HasColumnName("cd_profile");
 		modelBuilder.Entity<Post>().Property("CreatedById").HasColumnName("cd_created_by");
+		modelBuilder.Entity<Post>().HasMany<LikeOrDislikeRegister>().WithOne(l => l.Post).OnDelete(DeleteBehavior.Cascade);
+
+		modelBuilder.Entity<LikeOrDislikeRegister>().Property("Id").HasColumnName("cd_liked");
+		modelBuilder.Entity<LikeOrDislikeRegister>().Property("PostId").IsRequired();
+		modelBuilder.Entity<LikeOrDislikeRegister>().Property("PostId").HasColumnName("cd_post");
+		modelBuilder.Entity<LikeOrDislikeRegister>().Property("ProfileId").IsRequired();
+		modelBuilder.Entity<LikeOrDislikeRegister>().Property("ProfileId").HasColumnName("cd_profile");
+		modelBuilder.Entity<LikeOrDislikeRegister>().HasIndex("Id", "PostId", "ProfileId").IsUnique(true).HasDatabaseName("uk_likes");
 	}
 }

@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 namespace backendOrkletti.src.Repository.GenericRepository;
 
 public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity {
-	protected PostgreContext _context;
+	private readonly PostgreContext _context;
 	private DbSet<T> dataset;
 
 	public GenericRepository(PostgreContext context) {

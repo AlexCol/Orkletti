@@ -56,6 +56,38 @@ namespace backendOrkletti.Migrations
                     b.ToTable("community");
                 });
 
+            modelBuilder.Entity("backendOrkletti.src.Model.Entity.LikeOrDislikeRegister", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("cd_liked");
+
+                    b.Property<bool>("Liked")
+                        .HasColumnType("boolean")
+                        .HasColumnName("sn_liked");
+
+                    b.Property<Guid>("PostId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("cd_post");
+
+                    b.Property<Guid>("ProfileId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("cd_profile");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PostId");
+
+                    b.HasIndex("ProfileId");
+
+                    b.HasIndex("Id", "PostId", "ProfileId")
+                        .IsUnique()
+                        .HasDatabaseName("uk_likes");
+
+                    b.ToTable("like_dislike_control");
+                });
+
             modelBuilder.Entity("backendOrkletti.src.Model.Entity.Post", b =>
                 {
                     b.Property<Guid>("Id")
@@ -173,6 +205,25 @@ namespace backendOrkletti.Migrations
                         .HasForeignKey("CreatedById");
 
                     b.Navigation("CreatedBy");
+                });
+
+            modelBuilder.Entity("backendOrkletti.src.Model.Entity.LikeOrDislikeRegister", b =>
+                {
+                    b.HasOne("backendOrkletti.src.Model.Entity.Post", "Post")
+                        .WithMany()
+                        .HasForeignKey("PostId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("backendOrkletti.src.Model.Entity.Profile", "Profile")
+                        .WithMany()
+                        .HasForeignKey("ProfileId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Post");
+
+                    b.Navigation("Profile");
                 });
 
             modelBuilder.Entity("backendOrkletti.src.Model.Entity.Post", b =>
