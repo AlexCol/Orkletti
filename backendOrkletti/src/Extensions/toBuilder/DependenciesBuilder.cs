@@ -1,4 +1,6 @@
 using backendOrkletti.src.Repository.GenericRepository;
+using backendOrkletti.src.Repository.PostRepository;
+
 
 namespace backendOrkletti.src.Extensions.toBuilder;
 
@@ -15,6 +17,6 @@ public static class DependenciesBuilder {
 
 		//!adicionando classes para injeções de dependencia
 		builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
-		//builder.Services.AddScoped<IPostRepository, PostRepository>();
+		builder.Services.AddScoped<IPostRepository, PostRepository>();
 	}
 }

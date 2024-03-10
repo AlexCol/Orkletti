@@ -13,16 +13,16 @@ public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity {
 		dataset = context.Set<T>();
 	}
 
-	public T FindById(Guid id) {
+	virtual public T FindById(Guid id) {
 		T item = dataset.SingleOrDefault(p => p.Id.Equals(id));
 		return item;
 	}
 
-	public List<T> FindAll() {
+	virtual public List<T> FindAll() {
 		return dataset.ToList();
 	}
 
-	public T Create(T item) {
+	virtual public T Create(T item) {
 		try {
 			dataset.Add(item);
 			_context.SaveChanges();
@@ -32,7 +32,7 @@ public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity {
 		}
 	}
 
-	public T Update(T item) {
+	virtual public T Update(T item) {
 		T itemAtual = dataset.SingleOrDefault(p => p.Id.Equals(item.Id));
 		if (itemAtual == null) throw new InvalidDataException("Erro ao atualizar o registro.");
 
@@ -40,7 +40,7 @@ public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity {
 		_context.SaveChanges();
 		return item;
 	}
-	public void Delete(Guid id) {
+	virtual public void Delete(Guid id) {
 		var user = FindById(id);
 		if (user == null) throw new Exception("Usuário não encontrado ou já excluído.");
 
