@@ -13,52 +13,51 @@ public class PostRepository : GenericRepository<Post>, IPostRepository {
 		_context = context;
 	}
 
-	public void like(Guid postId, Guid profileId, bool like = true) {
-		using (var transaction = _context.Database.BeginTransaction()) {
-			try {
-				var post = _context.Posts.First(p => p.Id == postId);
-				var profile = _context.Profiles.First(p => p.Id == profileId);
-				var register = _context.LikeOrDislikeRegisters.FirstOrDefault(ldr => ldr.Post.Id == postId && ldr.Profile.Id == profileId);
-
-				if (register != null) {
-					updateExistingRegister(register, post, like);
-				} else {
-					createNewRegister(post, profile, like);
-				}
-				_context.SaveChanges();
-			} catch (Exception e) {
-				transaction.Rollback();
-				throw new Exception(e.Message);
-			}
-			transaction.Commit();
-		}
+	public void Like(Guid postId, Guid profileId) {
+		LikeOrDislike(postId, profileId, true);
 	}
 
-	public void dislike(Guid postId, Guid profileId) {
-		Log.Error("dislike");
-		like(postId, profileId, false);
+	public void Dislike(Guid postId, Guid profileId) {
+		LikeOrDislike(postId, profileId, false);
 	}
 
-	public List<Post> getPostsFromProfileId(Guid profileId) {
-		throw new NotImplementedException();
+	public List<Post> GetPostsFromProfileId(Guid profileId) {
+		return _context.Posts.Where(p => p.Profile.Id == profileId).ToList();
 	}
 
-	public List<Post> getPostsFromTopicId(Guid topicId) {
-		throw new NotImplementedException();
+	public List<Post> GetPostsFromTopicId(Guid topicId) {
+		return _context.Posts.Where(p => p.Topic.Id == topicId).ToList();
 	}
 
 
 	//!funções auxiliares privadas
-	private void updateExistingRegister(LikeOrDislikeRegister register, Post post, bool likedOrNot) {
+	public void LikeOrDislike(Guid postId, Guid profileId, bool likeOrDislike) {
+		try {
+			var register = _context.LikeOrDislikeRegisters.FirstOrDefault(ldr => ldr.Post.Id == postId && ldr.Profile.Id == profileId);
+
+			if (register != null) {
+				updateExistingRegister(register, likeOrDislike);
+			} else {
+				var post = _context.Posts.First(p => p.Id == postId);
+				var profile = _context.Profiles.First(p => p.Id == profileId);
+				createNewRegister(post, profile, likeOrDislike);
+			}
+			_context.SaveChanges();
+		} catch (Exception e) {
+			throw new Exception(e.Message);
+		}
+	}
+
+	private void updateExistingRegister(LikeOrDislikeRegister register, bool likedOrNot) {
 		if (register.Liked == likedOrNot) throw new Exception(likedOrNot ? "Já deu like no post!" : "Já deu dislike no post!");
 
 		register.Liked = likedOrNot;
 		if (likedOrNot) {
-			post.Likes++;
-			post.Dislikes--;
+			register.Post.Likes++;
+			register.Post.Dislikes--;
 		} else {
-			post.Likes--;
-			post.Dislikes++;
+			register.Post.Likes--;
+			register.Post.Dislikes++;
 		}
 	}
 
