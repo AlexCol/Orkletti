@@ -33,7 +33,10 @@ public class PostRepository : GenericRepository<Post>, IPostRepository {
 	//!funções auxiliares privadas
 	public void LikeOrDislike(Guid postId, Guid profileId, bool likeOrDislike) {
 		try {
-			var register = _context.LikeOrDislikeRegisters.FirstOrDefault(ldr => ldr.Post.Id == postId && ldr.Profile.Id == profileId);
+			var register = _context.LikeOrDislikeRegisters
+				.Include(ldr => ldr.Post)
+				.Include(ldr => ldr.Profile)
+				.FirstOrDefault(ldr => ldr.Post.Id == postId && ldr.Profile.Id == profileId);
 
 			if (register != null) {
 				updateExistingRegister(register, likeOrDislike);

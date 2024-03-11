@@ -12,9 +12,11 @@ public static class DependenciesBuilder {
 		builder.Services.AddControllers();
 
 		//!adicionando configurações
-		builder.AddSwagger();
-		builder.AddPostgre();
 		builder.AddLogService();
+		builder.AddPostgre();
+		builder.AddJWTService();
+		builder.AddCors();
+		builder.AddSwagger();
 		builder.AddAutoMapper();
 
 		//!adicionando classes para injeções de dependencia
