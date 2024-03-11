@@ -159,9 +159,13 @@ namespace backendOrkletti.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("cd_post");
 
-                    b.Property<byte[]>("Attachment")
-                        .HasColumnType("bytea")
-                        .HasColumnName("bl_post_attachment");
+                    b.Property<string>("AttachmentFile")
+                        .HasColumnType("text")
+                        .HasColumnName("bl_post_attachment_file");
+
+                    b.Property<string>("AttachmentName")
+                        .HasColumnType("text")
+                        .HasColumnName("bl_post_attachment_name");
 
                     b.Property<string>("Body")
                         .HasColumnType("text")

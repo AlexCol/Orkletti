@@ -42,7 +42,7 @@ public class GenericRepository<T> : IGenericRepository<T> where T : BaseEntity {
 	}
 	virtual public void Delete(Guid id) {
 		var user = FindById(id);
-		if (user == null) throw new Exception("Usuário não encontrado ou já excluído.");
+		if (user == null) throw new Exception("Item não encontrado ou já excluído.");
 
 		dataset.Remove(user);
 		_context.SaveChanges();

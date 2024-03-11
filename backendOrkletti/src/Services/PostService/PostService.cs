@@ -1,15 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Threading.Tasks;
 using AutoMapper;
-using backendOrkletti.src.Extensions.toFluntNotifications;
+using backendOrkletti.src.Extensions.toEntities;
+using backendOrkletti.src.Extensions.toString;
 using backendOrkletti.src.Model.Entity;
-using backendOrkletti.src.Model.Error;
 using backendOrkletti.src.Model.HttpModels.Request;
 using backendOrkletti.src.Model.HttpModels.Response;
 using backendOrkletti.src.Repository.PostRepository;
+using Serilog;
 
 namespace backendOrkletti.src.Services.PostService;
 
@@ -17,45 +13,48 @@ public class PostService : IPostService {
 
 	private readonly IPostRepository _repo;
 	private readonly IMapper _mapper;
-	public PostService(IPostRepository repo, IMapper mapper) {
+	private readonly IConfiguration _config;
+	public PostService(IPostRepository repo, IMapper mapper, IConfiguration config) {
 		_repo = repo;
 		_mapper = mapper;
+		_config = config;
 	}
 
-	public PostResponse GetById(Guid postId) {
+	public PostResponse FindById(Guid postId) {
 		var post = _repo.FindById(postId);
 		if (post == null) throw new Exception("Post não encontrado!");
 
 		return _mapper.Map<PostResponse>(post);
 	}
 
-	public List<PostResponse> GetPostsFromProfileId(Guid profileId) {
-		return _mapper.Map<List<PostResponse>>(_repo.GetPostsFromProfileId(profileId));
+	public List<PostResponse> FindByProfileId(Guid profileId) {
+		return _mapper.Map<List<PostResponse>>(_repo.FindByProfileId(profileId));
 	}
 
-	public List<PostResponse> GetPostsFromTopicId(Guid topicId) {
-		return _mapper.Map<List<PostResponse>>(_repo.GetPostsFromTopicId(topicId));
+	public List<PostResponse> FindByTopicId(Guid topicId) {
+		return _mapper.Map<List<PostResponse>>(_repo.FindByTopicId(topicId));
 	}
 
 	public PostResponse Create(PostRequest newPost) {
 		var post = _mapper.Map<Post>(newPost);
-		return _mapper.Map<PostResponse>(_repo.Update(post));
+		post.ValidateFile(_config); //throws exception in case of error
+		return _mapper.Map<PostResponse>(_repo.Create(post));
 	}
 
-	public PostResponse Edit(Guid postId, PostRequest editPost) {
+	public PostResponse Update(Guid postId, PostRequest editPost) {
 		var post = _repo.FindById(postId);
 		if (post == null) throw new Exception("Post não encontrado!");
 
-		if (post.Body != editPost.Body) post.Body = editPost.Body;
-		if (post.Attachment != editPost.Attachment) post.Attachment = editPost.Attachment;
+		var editPostConverted = _mapper.Map<Post>(editPost);
+
+		if (post.Body != editPostConverted.Body) post.Body = editPost.Body;
+		if (post.AttachmentFile != editPostConverted.AttachmentFile) post.AttachmentFile = editPostConverted.AttachmentFile;
+		if (post.AttachmentName != editPostConverted.AttachmentName) post.AttachmentName = editPostConverted.AttachmentName;
 
 		return _mapper.Map<PostResponse>(_repo.Update(post));
 	}
 
 	public void Delete(Guid postId) {
-		var post = _repo.FindById(postId);
-		if (post == null) throw new Exception("Post não encontrado!");
-
 		_repo.Delete(postId);
 	}
 

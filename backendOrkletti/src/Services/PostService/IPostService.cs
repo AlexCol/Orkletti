@@ -9,11 +9,11 @@ using backendOrkletti.src.Model.HttpModels.Response;
 namespace backendOrkletti.src.Services.PostService;
 
 public interface IPostService {
-	public PostResponse GetById(Guid postId);
-	public List<PostResponse> GetPostsFromProfileId(Guid profileId);
-	public List<PostResponse> GetPostsFromTopicId(Guid topicId);
+	public PostResponse FindById(Guid postId);
+	public List<PostResponse> FindByProfileId(Guid profileId);
+	public List<PostResponse> FindByTopicId(Guid topicId);
 	public PostResponse Create(PostRequest newPost);
-	public PostResponse Edit(Guid postId, PostRequest editPost);
+	public PostResponse Update(Guid postId, PostRequest editPost);
 	public void Delete(Guid postId);
 	public void Like(Guid postId, Guid profileId);
 	public void Dislike(Guid postId, Guid profileId);
