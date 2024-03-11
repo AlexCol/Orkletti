@@ -20,7 +20,7 @@ public class PostController : ControllerBase {
 	public IActionResult Like([FromBody] LikeDislikeRequest request) {
 		try {
 			_service.Like(request.postId, request.profileId);
-			return Ok("Like realizado!");
+			return Ok();
 		} catch (Exception e) {
 			return BadRequest(new ErrorModel(e.Message));
 		}
@@ -30,7 +30,7 @@ public class PostController : ControllerBase {
 	public IActionResult Dislike([FromBody] LikeDislikeRequest request) {
 		try {
 			_service.Dislike(request.postId, request.profileId);
-			return Ok("Dislike realizado!");
+			return Ok();
 		} catch (Exception e) {
 			return BadRequest(new ErrorModel(e.Message));
 		}

@@ -31,7 +31,7 @@ public class PostRepository : GenericRepository<Post>, IPostRepository {
 
 
 	//!funções auxiliares privadas
-	public void LikeOrDislike(Guid postId, Guid profileId, bool likeOrDislike) {
+	private void LikeOrDislike(Guid postId, Guid profileId, bool likeOrDislike) {
 		try {
 			var register = _context.LikeOrDislikeRegisters
 				.Include(ldr => ldr.Post)
@@ -39,7 +39,10 @@ public class PostRepository : GenericRepository<Post>, IPostRepository {
 				.FirstOrDefault(ldr => ldr.Post.Id == postId && ldr.Profile.Id == profileId);
 
 			if (register != null) {
-				updateExistingRegister(register, likeOrDislike);
+				if (register.Liked == likeOrDislike)
+					deleteExistingRegister(register, likeOrDislike);
+				else
+					updateExistingRegister(register, likeOrDislike);
 			} else {
 				var post = _context.Posts.First(p => p.Id == postId);
 				var profile = _context.Profiles.First(p => p.Id == profileId);
@@ -48,19 +51,6 @@ public class PostRepository : GenericRepository<Post>, IPostRepository {
 			_context.SaveChanges();
 		} catch (Exception e) {
 			throw new Exception(e.Message);
-		}
-	}
-
-	private void updateExistingRegister(LikeOrDislikeRegister register, bool likedOrNot) {
-		if (register.Liked == likedOrNot) throw new Exception(likedOrNot ? "Já deu like no post!" : "Já deu dislike no post!");
-
-		register.Liked = likedOrNot;
-		if (likedOrNot) {
-			register.Post.Likes++;
-			register.Post.Dislikes--;
-		} else {
-			register.Post.Likes--;
-			register.Post.Dislikes++;
 		}
 	}
 
@@ -78,4 +68,28 @@ public class PostRepository : GenericRepository<Post>, IPostRepository {
 
 		_context.LikeOrDislikeRegisters.Add(register);
 	}
+
+	private void updateExistingRegister(LikeOrDislikeRegister register, bool likedOrNot) {
+		if (register.Liked == likedOrNot) throw new Exception(likedOrNot ? "Já deu like no post!" : "Já deu dislike no post!");
+
+		register.Liked = likedOrNot;
+		if (likedOrNot) {
+			register.Post.Likes++;
+			register.Post.Dislikes--;
+		} else {
+			register.Post.Likes--;
+			register.Post.Dislikes++;
+		}
+	}
+
+	private void deleteExistingRegister(LikeOrDislikeRegister register, bool likeOrDislike) {
+		if (likeOrDislike) {
+			register.Post.Likes--;
+		} else {
+			register.Post.Dislikes--;
+		}
+
+		_context.LikeOrDislikeRegisters.Remove(register);
+	}
+
 }

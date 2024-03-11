@@ -29,6 +29,10 @@ namespace backendOrkletti.Migrations
                         .HasColumnType("uuid")
                         .HasColumnName("cd_community");
 
+                    b.Property<bool>("AutoIncludeMembers")
+                        .HasColumnType("boolean")
+                        .HasColumnName("sn_auto_include_members");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("timestamp without time zone")
                         .HasColumnName("dt_created_at");
@@ -45,6 +49,10 @@ namespace backendOrkletti.Migrations
                         .HasColumnType("bytea")
                         .HasColumnName("bl_image");
 
+                    b.Property<bool>("IsPrivate")
+                        .HasColumnType("boolean")
+                        .HasColumnName("sn_private");
+
                     b.Property<string>("Tittle")
                         .HasColumnType("text")
                         .HasColumnName("ds_title");
@@ -54,6 +62,62 @@ namespace backendOrkletti.Migrations
                     b.HasIndex("CreatedById");
 
                     b.ToTable("community");
+                });
+
+            modelBuilder.Entity("backendOrkletti.src.Model.Entity.CommunityRequestMembership", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("cd_community_request_membership");
+
+                    b.Property<Guid>("CommunityId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("cd_community");
+
+                    b.Property<Guid>("ProfileId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("cd_profile");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CommunityId");
+
+                    b.HasIndex("ProfileId");
+
+                    b.HasIndex("Id", "CommunityId", "ProfileId")
+                        .IsUnique()
+                        .HasDatabaseName("uk_members_request");
+
+                    b.ToTable("community_request_membership");
+                });
+
+            modelBuilder.Entity("backendOrkletti.src.Model.Entity.ComunityMembership", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid")
+                        .HasColumnName("cd_community_members");
+
+                    b.Property<Guid>("CommunityId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("cd_community");
+
+                    b.Property<Guid>("ProfileId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("cd_profile");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CommunityId");
+
+                    b.HasIndex("ProfileId");
+
+                    b.HasIndex("Id", "CommunityId", "ProfileId")
+                        .IsUnique()
+                        .HasDatabaseName("uk_com_members");
+
+                    b.ToTable("community_membership");
                 });
 
             modelBuilder.Entity("backendOrkletti.src.Model.Entity.LikeOrDislikeRegister", b =>
@@ -205,6 +269,44 @@ namespace backendOrkletti.Migrations
                         .HasForeignKey("CreatedById");
 
                     b.Navigation("CreatedBy");
+                });
+
+            modelBuilder.Entity("backendOrkletti.src.Model.Entity.CommunityRequestMembership", b =>
+                {
+                    b.HasOne("backendOrkletti.src.Model.Entity.Community", "Community")
+                        .WithMany()
+                        .HasForeignKey("CommunityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("backendOrkletti.src.Model.Entity.Profile", "Profile")
+                        .WithMany()
+                        .HasForeignKey("ProfileId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Community");
+
+                    b.Navigation("Profile");
+                });
+
+            modelBuilder.Entity("backendOrkletti.src.Model.Entity.ComunityMembership", b =>
+                {
+                    b.HasOne("backendOrkletti.src.Model.Entity.Community", "Community")
+                        .WithMany()
+                        .HasForeignKey("CommunityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("backendOrkletti.src.Model.Entity.Profile", "Profile")
+                        .WithMany()
+                        .HasForeignKey("ProfileId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Community");
+
+                    b.Navigation("Profile");
                 });
 
             modelBuilder.Entity("backendOrkletti.src.Model.Entity.LikeOrDislikeRegister", b =>

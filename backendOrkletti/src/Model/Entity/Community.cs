@@ -19,4 +19,10 @@ public class Community : BaseEntity {
 
 	[Column("dt_created_at")]
 	public DateTime CreatedAt { get; set; }
+
+	[Column("sn_private")]
+	public bool IsPrivate { get; set; }
+
+	[Column("sn_auto_include_members")]
+	public bool AutoIncludeMembers { get; set; }
 }
