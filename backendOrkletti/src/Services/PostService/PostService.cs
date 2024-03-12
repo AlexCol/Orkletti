@@ -35,9 +35,18 @@ public class PostService : IPostService {
 		return _mapper.Map<List<PostResponse>>(_repo.FindByTopicId(topicId));
 	}
 
+	public string GetFileFromPost(Guid postId) {
+		var post = _repo.FindById(postId);
+		if (post == null) throw new Exception("Post não encontrado!");
+
+		return post.AttachmentFile;
+	}
+
 	public PostResponse Create(PostRequest newPost) {
 		var post = _mapper.Map<Post>(newPost);
-		post.ValidateFile(_config); //throws exception in case of error
+		if (post.AttachmentFile != null) {
+			post.ValidateFile(_config); //throws exception in case of error
+		}
 		return _mapper.Map<PostResponse>(_repo.Create(post));
 	}
 

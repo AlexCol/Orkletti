@@ -54,11 +54,17 @@ public class PostRepository : GenericRepository<Post>, IPostRepository {
 	}
 
 	public List<Post> FindByProfileId(Guid profileId) {
-		return _context.Posts.Where(p => p.Profile.Id == profileId).ToList();
+		return _context.Posts
+			.Include(t => t.Profile)
+			.Include(t => t.CreatedBy)
+			.Where(p => p.Profile.Id == profileId).ToList();
 	}
 
 	public List<Post> FindByTopicId(Guid topicId) {
-		return _context.Posts.Where(p => p.Topic.Id == topicId).ToList();
+		return _context.Posts
+			.Include(t => t.Topic)
+			.Include(t => t.CreatedBy)
+			.Where(p => p.Topic.Id == topicId).ToList();
 	}
 
 
@@ -76,8 +82,9 @@ public class PostRepository : GenericRepository<Post>, IPostRepository {
 				else
 					updateExistingRegister(register, likeOrDislike);
 			} else {
-				var post = _context.Posts.First(p => p.Id == postId);
-				var profile = _context.Profiles.First(p => p.Id == profileId);
+				var post = _context.Posts.FirstOrDefault(p => p.Id == postId);
+				var profile = _context.Profiles.FirstOrDefault(p => p.Id == profileId);
+				if (post == null || profile == null) throw new Exception("Post ou perfil não encontrados!");
 				createNewRegister(post, profile, likeOrDislike);
 			}
 			_context.SaveChanges();

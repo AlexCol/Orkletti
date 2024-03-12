@@ -17,4 +17,5 @@ public interface IPostService {
 	public void Delete(Guid postId);
 	public void Like(Guid postId, Guid profileId);
 	public void Dislike(Guid postId, Guid profileId);
+	public string GetFileFromPost(Guid postId);
 }

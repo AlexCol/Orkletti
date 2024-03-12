@@ -9,7 +9,6 @@ public class PostResponse {
 	public Guid Id { get; set; }
 	public string Body { get; set; }
 	public string AttachmentName { get; set; }
-	public string AttachmentFile { get; set; }
 	public Guid Topic { get; set; }
 	public Guid Profile { get; set; }
 	public Guid CreatedBy { get; set; }
